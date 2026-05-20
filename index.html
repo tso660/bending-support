@@ -1,32 +1,666 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=https://warming-memo-robin-eliminate.trycloudflare.com/">
-  <title>通驰 · 售后技术支持</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>安徽通驰数控有限公司 · 售后技术支持</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    .card { background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; max-width: 400px; }
-    .icon { font-size: 48px; margin-bottom: 16px; }
-    h1 { color: #1a73e8; font-size: 20px; margin-bottom: 12px; }
-    p { color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
-    .btn { display: inline-block; background: #1a73e8; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; }
-    .btn:hover { background: #1557b0; }
-    .loading { color: #999; font-size: 13px; margin-top: 16px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: #f5f6fa;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      background: #1a73e8;
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .header-icon { font-size: 22px; }
+    .header-title { font-size: 16px; font-weight: 600; }
+    .header-sub { font-size: 12px; opacity: 0.85; margin-left: auto; }
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; line-height: 1.6; font-size: 14px; word-wrap: break-word; }
+    .msg.user { background: #1a73e8; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .msg.bot { background: #fff; color: #333; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .msg.bot code { background: #f0f2f5; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+    .msg.bot pre { background: #f0f2f5; padding: 10px; border-radius: 8px; overflow-x: auto; font-size: 13px; white-space: pre-wrap; }
+    .msg.bot strong { color: #1a73e8; }
+    .msg-meta { font-size: 11px; opacity: 0.5; margin-top: 4px; }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 8px 14px; }
+    .typing-dot { width: 7px; height: 7px; background: #999; border-radius: 50%; animation: bounce 1.4s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    .input-area {
+      padding: 12px 16px;
+      background: #fff;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .input-box {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 18px;
+      padding: 10px 16px;
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      max-height: 120px;
+      line-height: 1.4;
+      font-family: inherit;
+      -webkit-appearance: none;
+    }
+    .input-box:focus { border-color: #1a73e8; }
+    .send-btn {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+      -webkit-appearance: none;
+    }
+    .send-btn:hover { background: #1557b0; }
+    .send-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .welcome {
+      background: #e8f0fe;
+      color: #1a73e8;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .welcome strong { display: block; margin-bottom: 6px; font-size: 14px; }
+    .welcome ul { margin-left: 16px; margin-top: 6px; }
+    .welcome li { margin-bottom: 3px; }
+    .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tag {
+      background: #1a73e8;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tag:active { opacity: 0.8; }
+    .source-badge {
+      display: inline-block;
+      background: #34a853;
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .source-badge.local { background: #34a853; }
+    .source-badge.api { background: #1a73e8; }
+    .source-badge.error { background: #ea4335; }
+    @media (max-width: 600px) {
+      .msg { max-width: 92%; font-size: 15px; }
+      .header-sub { display: none; }
+      .header-title { font-size: 15px; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">⚙️</div>
-    <h1>通驰</h1>
-    <p>正在跳转至售后技术支持系统...<br>如果未自动跳转，请点击下方按钮</p>
-    <a class="btn" href="https://warming-memo-robin-eliminate.trycloudflare.com/">进入售后支持系统</a>
-    <div class="loading">⏳ 自动跳转中...</div>
+  <div class="header">
+    <span class="header-icon">⚙️</span>
+    <span class="header-title">安徽通驰数控 · 售后技术支持</span>
+    <span class="header-sub">DA-53T · E21 · E22 · DE15 · KT15</span>
   </div>
-  <script>
-    setTimeout(() => {
-      window.location.href = 'https://warming-memo-robin-eliminate.trycloudflare.com/';
-    }, 1500);
-  </script>
+
+  <div class="chat-container" id="chat"></div>
+
+  <div class="input-area">
+    <textarea class="input-box" id="input" rows="1" placeholder="请输入问题,如:DA-53T怎么编程?" onkeydown="handleKey(event)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="send()">发送</button>
+  </div>
+
+<script>
+// ================== 本地知识库 FAQ ==================
+const FAQ = {
+  "da-53t怎么创建新产品": `根据 DA-53Tx 2D 参考手册(V1.8),创建新产品步骤:
+1. 进入「产品」模式 → 点击「新产品」→「开始新的图形产品」
+2. 输入产品名称、材料类型、板料厚度
+3. 2D图形绘制(草图/拖拽/数值输入/缩放)
+4. 设置折弯属性(自由折弯/大圆弧/翻边/压平)
+5. 进入「折弯工序」→ 配置模具 → 编排顺序 → 自动碰撞检查
+6. 生成CNC程序,进入自动模式执行
+关键准备:设置模式 → 材料页面配置属性;机床模式 → 模具库录入数据`,
+
+  "da-53t怎么编程": `DA-53T/T 系列编程方式:
+**图形编程(推荐):** 创建新产品→绘制2D图形→模具配置→折弯工序→存储
+**数字编程(手动):** 逐工步编辑折弯方式/角度/压力/速度/挡指位置`,
+
+  "da-53t怎么开机": `DA-53T 开机步骤:合上机床总电源→等待自检→确认参考点→手动模式检查→加载模具→自动模式生产。注意:首次开机需执行回参考点。`,
+
+  "da-53t模具怎么配置": `DA-53T 模具配置:进入「机床」→「上模编程」/「下模编程」→输入高度/角度/V开口/半径→保存到模具库→编程时从模具库选择。`,
+
+  "da-53t怎么校正": `DA-53T 校正:角度校正→输入实测角度自动补偿;X轴校正→输入实测尺寸自动补偿;Y轴校正→试折后输入校正值。校正前确认材料参数和模具数据准确。`,
+
+  "da-58tx怎么编程": `DA-58Tx 四轴图形编程:产品库→创建新产品→手指绘制轮廓→模具库选择→自动计算工序→生成CNC程序。支持离线编程软件导入。`,
+
+  "da-66t怎么编程": `DA-66T V2.6 编程:支持DXF导入、2D/3D图形编程、模具配置、碰撞检测、自动计算展开长度和轴位置、圆弧校正。支持USB/网络备份。`,
+
+  "e21怎么编程": `E21 编程:进入编程模式→输入材料厚度/折弯角度/长度/后挡料位置→设置压力→存储→自动模式执行。40程序×25工步,支持快速示教。`,
+
+  "e21怎么开机": `E21 开机:合电源→等待自检→按回参考点→检查显示→手动测试→开始生产。`,
+
+  "e21报警": `E21 报警处理:E001系统错误→重启;E002编码器故障→检查接线;E003限位开关→手动复位;E004超压→降低压力;E005通讯错误→检查通讯线。详见手册第3章。`,
+
+  "e22怎么编程": `E22 编程:进入编程/运行→选择单步/多步→设置角度/Y轴/压力/X轴→设置模具参数→存储运行。40程序×25工步,支持角度校准和大圆弧。`,
+
+  "e22报警": `E22 报警处理:E001初始化失败→重启检查电源;E002编码器错误→检查接线;E003限位开关→手动复位;E004压力超限→降低压力;E005通信故障→检查通讯线。详见V5.13第4章。`,
+
+  "e22角度不准": `E22 角度调试:进入「角度调试」→实际折弯测量→输入实测角度→系统自动补偿。常见原因:模具参数不对、材料参数不符、液压压力波动、油缸不同步。`,
+
+  "e22怎么校准": `E22 校准:X轴→传动系数校准;角度→试折后输入实测值自动补偿;压力→检查溢流阀设定并用压力表实测。`,
+
+  "de15怎么编程": `DE-15 V8.19 编程:单步→输入尺寸/角度/压力;多步→逐工步设置参数。支持大圆弧和升降R轴,支持密码保护。`,
+
+  "de15怎么开机": `DE-15 开机:合电源→等待启动→选择模式→如需输入密码→检查轴状态→开始操作。`,
+
+  "kt15怎么操作": `KT15 操作:开机→选择编辑/运行模式→输入角度/后挡料/压力→支持模具参数管理和多轴控制(X/R/Z)。中文/英文界面。`,
+
+  "漏油": `液压漏油排查:
+1. 油缸密封圈老化→更换密封件
+2. 管路接头松动→紧固/更换接头,检查O型圈
+3. 液压阀块渗漏→检查密封面,更换密封垫
+4. 油泵轴封损坏→更换轴封
+排查:确定位置→停机泄压检查→检查油污染度→检查压力是否过高。`,
+
+  "压力不足": `压力不足排查:
+1. 溢流阀设定过低→调至额定值
+2. 油泵磨损→检查输出流量压力
+3. 液压油不足/污染→补充或换油,清洁滤芯
+4. 电磁阀未全开→检查线圈和阀芯
+5. 油缸内泄→检查密封
+严禁超额定压力。`,
+
+  "不回程": `滑块不回程排查:
+1. 回程电磁阀未得电→检查线圈/接线/PLC
+2. 液压锁未打开→检查控制油路压力
+3. 油缸下腔背压→检查卸荷阀/节流阀
+4. 机械卡死→检查导轨/丝杠异物
+5. 安全门/光栅未复位→检查安全回路
+紧急:手动泄压后缓慢回升,切勿强行拆卸管路。`,
+
+  "油泵不工作": `油泵不工作排查:
+1. 检查电源→万用表测接触器输出
+2. 检查接触器→是否吸合/线圈得电
+3. 检查热继电器→是否跳闸
+4. 检查电机→测绝缘电阻
+5. 检查联轴器→是否断裂
+应急:检查油位,缺油导致吸空损坏。`,
+
+  "油缸不同步": `双缸不同步排查:
+1. 伺服阀参数不一致→检查增益设置
+2. 油缸内泄差异→检查密封
+3. 节流阀设定不同→调整流量一致
+4. 导轨阻力不均→清洁润滑
+5. 油温不均→检查两侧温度`,
+
+  "伺服驱动器报警": `伺服报警处理:
+AL001过载→检查机械负载;AL002过压→检查制动电阻;AL003欠压→检查电源;AL004编码器故障→检查接线;AL005通讯故障→检查线缆。
+通用:记录代码→查手册→断电重启→检查接线和机械。`,
+
+  "光栅尺故障": `光栅尺/编码器故障:
+现象:位置乱跳/不变化/定位差。
+排查:检查接线是否松动/断线/受干扰→清洁读数头和光栅尺→检查屏蔽接地→检查供电电压→检查读数头间隙。
+注意:清洁时用无水酒精,勿用力擦拭。`,
+
+  "急停": `急停排查:
+检查急停按钮是否按下→安全门是否关好→光栅/激光是否有遮挡→脚踏开关是否卡住→PLC输入点状态。
+方法:查看PLC输入找出断开节点→逐一短接排查→确认所有安全装置复位后解除急停。`,
+
+  "精度差": `精度差排查:
+角度差:模具磨损/材料厚度不一致/压力波动/未做角度校正/油缸不同步。
+尺寸差(后挡料):丝杠间隙大/编码器故障/导轨松动/未做X轴校准。`,
+
+  "s860功能": `VIS-S860/S875:18.5/21.5英寸触控屏。功能:手绘工件设计、DXF导入模具库、3D折弯软件、DataM激光角度测量、Modbus TCP联网。`,
+
+  "怎么换模": `换模步骤:停机无压→松开夹紧→取出旧模(用吊具)→清洁安装面→安装新模→夹紧到位→录入模具参数→试折确认。
+安全:模具很重必须用吊具,换模必须停机无压,多人配合统一指挥。`,
+
+  "怎么备份": `数据备份:
+DA系列:设置→备份/恢复→选择内容→备份到U盘或网络。
+E系列:系统设置→参数备份→导出到U盘。
+建议:每月至少一次,修改参数后备份。`,
+
+  "安全操作": `安全操作要点:
+开机前检查模具和部件→戴防护用品→确认安全装置有效→首件试折→不伸手入模具区→多人统一指挥→异常立即停机→定期维护保养。
+紧急:立即按急停→切断电源→排除故障后重开。`,
+
+  "怎么删除产品": `DA-53T 删除产品:进入「产品库」→ 选择要删除的产品 → 点击「删除」→ 确认删除。注意:删除后不可恢复,建议先备份。`,
+
+  "怎么复制产品": `DA-53T 复制产品:进入「产品库」→ 选择产品 → 点击「复制」→ 输入新产品ID → 确认。复制的数据包含全部工步和参数。`,
+
+  "usb备份": `DA-53T USB备份:设置 → 备份/恢复 → 选择备份内容(产品/模具/参数)→ 插入U盘 → 点击备份。备份文件可导入其他同型号系统。`,
+
+  "自动模式": `DA-53T 自动模式:进入「自动模式」→ 选择产品 → 按「启动」→ 系统自动执行全部工步。支持单步暂停和连续运行。`,
+
+  "手动模式": `DA-53T 手动模式:进入「手动模式」→ 可单步执行、手动移动各轴、编辑参数、示教位置。用于调试和试折。`,
+
+  "示教": `DA-53T 示教功能:手动模式 → 手动移动轴到目标位置 → 按「示教」键 → 当前位置自动记录到程序中。`,
+
+  "大圆弧": `DA-53T 大圆弧折弯:产品图形中选中折弯 → 选择「大圆弧折弯」→ 输入分段数 → 确认。注意:大圆弧需使用开口较小的V模。`,
+
+  "翻边": `DA-53T 翻边折弯:产品图形中选中折弯 → 选择「翻边折弯」→ 系统自动调整工步顺序避免干涉。`,
+
+  "网络功能": `DA-53T 网络功能:设置 → 网络设定 → 配置IP地址 → 连接局域网。支持产品/模具数据网络传输和多机数据同步。`,
+
+  "油温过高": `液压油温过高排查:
+1. 检查冷却器 → 清洁散热片,检查风扇
+2. 检查液压油牌号 → 夏季使用高粘度油
+3. 检查溢流阀 → 设定压力过高导致发热
+4. 检查油泵 → 磨损导致效率下降发热
+5. 减少连续工作时间 → 适当停机冷却
+正常油温:30-55°C,超过60°C需停机检查。`,
+
+  "液压油更换": `液压油更换周期:
+- 新设备:运行300小时后首次更换
+- 正常使用:每2000小时或每年更换
+- 如发现油发黑/乳化/有杂质:立即更换
+更换步骤:停机无压→排空旧油→清洗油箱→更换滤芯→加注新油→排气→试运行`,
+
+  "滤芯更换": `液压滤芯更换:
+- 吸油滤芯:每500小时检查,每1000小时更换
+- 回油滤芯:每1000小时检查,每2000小时更换
+- 如发现滤芯堵塞指示器报警:立即更换
+注意:更换时系统必须无压,防止喷油。`,
+
+  "系统排气": `液压系统排气:
+1. 松开油缸顶部排气阀
+2. 点动油泵让油缓慢进入油缸
+3. 当有油从排气阀流出时拧紧
+4. 两侧油缸分别排气
+5. 排气后做几次全行程动作确认无爬行`,
+
+  "变频器故障": `变频器故障排查:
+- **过流**:检查电机绝缘/机械卡死/加速时间
+- **过压**:检查制动电阻/减速时间
+- **欠压**:检查输入电源
+- **过载**:检查机械负载/电机功率
+- **通讯故障**:检查通讯线和参数设置
+排查:记录故障代码→查手册→断电重启→按手册逐一排查。`,
+
+  "接触器故障": `接触器故障排查:
+1. 不吸合:检查线圈电压、控制回路、触点是否烧蚀
+2. 吸合不牢:检查电压是否过低、铁芯是否有异物
+3. 触点烧蚀:更换触点或整个接触器
+4. 噪音大:检查铁芯短路环是否断裂
+注意:380V电压,操作时断电检修。`,
+
+  "plc故障": `PLC故障排查:
+1. 指示灯状态:PWR电源灯/ERR错误灯/RUN运行灯
+2. ERR灯亮:检查程序/电池/扩展模块
+3. 输入点无反应:检查传感器/接线/电源
+4. 输出点无反应:检查继电器/接触器/负载
+5. 通讯故障:检查通讯线缆和参数
+排查:先查电源→再查输入→再查输出→最后查程序。`,
+
+  "日常保养": `折弯机日常保养:
+1. 每天:清洁工作台/导轨/模具,检查油位
+2. 每周:检查各部位紧固件,润滑导轨丝杠
+3. 每月:检查液压油清洁度,检查电气接线
+4. 每季:更换液压滤芯,检查油泵/油缸
+5. 每年:全面检查液压系统,校准各轴精度`,
+
+  "润滑": `折弯机润滑要点:
+- 导轨:每班一次,使用锂基润滑脂
+- 丝杠:每周一次,使用机油或专用润滑脂
+- 轴承:每月检查,必要时补充润滑脂
+- 链条/齿轮:每三个月检查
+注意:润滑前先清洁旧油污。`,
+
+  "噪音大": `折弯机噪音大排查:
+1. 液压噪音:检查油泵吸油/滤芯/气泡
+2. 机械噪音:检查导轨润滑/丝杠间隙/轴承磨损
+3. 电机噪音:检查电机轴承/联轴器/固定螺栓
+4. 模具噪音:检查模具间隙/是否有异物
+处理:找出声源→清洁/润滑/紧固/更换。`,
+
+  "速度变慢": `折弯机速度变慢排查:
+1. 液压系统:检查油温/油粘度/滤芯堵塞
+2. 电气系统:检查变频器参数/电机状态
+3. 机械系统:检查导轨润滑/丝杠阻力
+4. 参数设置:检查速度参数是否被误改
+5. 系统压力:检查溢流阀设定是否降低`,
+
+  "电气原理图": `电气原理图阅读指南：
+**主回路（高压）：** 三相380V→断路器→接触器→电机
+**控制回路（低压）：** 变压器降压→整流滤波→继电器/PLC
+**伺服系统：** 伺服驱动器→伺服电机→编码器反馈
+**常见故障对应：**
+- 电机不转 → 查主回路接触器/热继电器
+- 某轴不动 → 查伺服驱动器/电磁阀
+- 无动作 → 查PLC输出/中间继电器
+- 编码器报警 → 查接线和屏蔽
+
+**📄 原始PDF图纸下载（扫描件）：**
+- <a href="/downloads/电液折弯机原理图.pdf" target="_blank">300吨以下电液折弯机原理图</a>
+- <a href="/downloads/KT15-睿能电气原理图.pdf" target="_blank">KT15-睿能 EPLAN电气图纸</a>
+- <a href="/downloads/剪板机E21S-电气原理图.pdf" target="_blank">剪板机E21S变频-电气原理图</a>`,
+
+  "伺服驱动器接线": `伺服驱动器接线要点：
+**电源：** L1/L2/L3（三相），PE接地
+**电机：** U/V/W接伺服电机，相序错误会抖动
+**编码器（最关键）：** A+/A-、B+/B-、Z+/Z-差分信号；5V/0V电源；PE屏蔽层单端接地。编码器线必须与动力线分开走线。
+**控制信号：** PULS±脉冲、DIR±方向、SON使能、ALM报警`,
+
+  "编码器接线": `编码器/光栅尺接线要点:
+**信号线:** A+/A-、B+/B-正交脉冲;Z+/Z-零点信号。差分信号必须成对连接。
+**电源:** +5V/0V(常见5V,过高会烧毁)
+**屏蔽:** 控制器端单端接地,编码器端悬空,禁止两端同接。
+**布线:** 与动力线间距≥20cm,避免与变频器线并行,穿金属软管。
+**故障:** 位置乱跳→接触不良/干扰;不变化→损坏/供电异常;精度差→屏蔽不良。`,
+
+  "电磁阀不动作": `电磁阀不动作排查:
+**电气:** 检查线圈电压→测电阻→检查PLC输出→检查接线
+**液压:** 检查系统压力→阀芯是否卡死→弹簧是否断裂→油液清洁度
+**测试:** 直接给电磁阀送24V,能动=控制回路问题,不能动=电磁阀本身问题。
+注意:湿式电磁阀不能干烧,更换时确认电压(24VDC/220VAC)。`,
+
+  "kt15电气图": `KT15-睿能电气系统:
+**主回路:** 三相380V→断路器→接触器→油泵电机7.5KW
+**控制回路:** 24VDC,脚踏开关,悬吊箱面板
+**伺服:** X/R/Z1/Z2轴伺服,GIVI光栅尺反馈
+**液压:** REXROTH阀组,压力控制,各轴电磁阀
+详细接线见EPLAN电气图纸。`,
+
+  "e21s电气": `剪板机E21S变频型电气:
+**主回路:** 三相380V→断路器→接触器→油泵电机M1,X轴变频器控制M2
+**控制:** E21S系统核心,24VDC,X/Y轴编码器
+**常见故障:** 后挡料不准→查X轴编码器和变频器;不剪切→查脚踏开关和电磁阀;行程异常→查行程电机和限位开关。`
+};
+
+// 智能匹配映射
+const SYSTEM_MAP = {
+  'da53': ['da53', 'da-53', 'da53t'],
+  'da58': ['da58', 'da-58'],
+  'da66': ['da66', 'da-66'],
+  'e21': ['e21', 'e21s'],
+  'e22': ['e22'],
+  'de15': ['de15', 'de-15'],
+  'kt15': ['kt15'],
+  's860': ['s860', 's875'],
+};
+const PROBLEM_MAP = {
+  '报警': ['报警', '故障', '报错', '错误'],
+  '编程': ['编程', '程序'],
+  '开机': ['开机', '启动'],
+  '校正': ['校正', '校准', '标定', '补偿'],
+  '漏油': ['漏油', '泄漏', '渗油'],
+  '压力': ['压力', '没压力'],
+  '回程': ['回程', '不回'],
+  '精度': ['精度', '不准', '误差'],
+  '换模': ['换模'],
+  '备份': ['备份', '保存'],
+  '模具': ['模具'],
+  '安全': ['安全'],
+  '油温': ['油温', '发热'],
+  '速度': ['速度', '变慢', '慢'],
+  '噪音': ['噪音', '异响'],
+  '电气': ['电气', '电路', '原理图'],
+  '编码器': ['编码器', '光栅尺'],
+  '伺服': ['伺服', '驱动器'],
+  'plc': ['plc', '可编程'],
+  '电磁阀': ['电磁阀', '阀'],
+  '油泵': ['油泵', '泵'],
+  '不同步': ['不同步', '不同'],
+  '急停': ['急停', '停止'],
+  '排气': ['排气', '空气'],
+  '润滑': ['润滑', '加油'],
+  '保养': ['保养', '维护'],
+  '示教': ['示教', '教导'],
+  '自动': ['自动'],
+  '手动': ['手动'],
+  '删除': ['删除', '移除'],
+  '复制': ['复制', '拷贝'],
+  '翻边': ['翻边'],
+  '圆弧': ['圆弧', '大圆弧'],
+  '网络': ['网络', '联网'],
+  '删除产品': ['删除产品'],
+  '复制产品': ['复制产品'],
+  '换模': ['换模', '换模具'],
+};
+
+function searchFAQ(q) {
+  q = q.toLowerCase().trim();
+  if (!q) return null;
+
+  // 1. 精确匹配
+  for (const key in FAQ) {
+    if (q.includes(key)) return { answer: FAQ[key], source: '本地知识库' };
+  }
+
+  // 2. 智能系统+问题匹配
+  for (const sysKey in SYSTEM_MAP) {
+    const sysMatch = SYSTEM_MAP[sysKey].some(n => q.includes(n));
+    if (sysMatch) {
+      for (const probKey in PROBLEM_MAP) {
+        const probMatch = PROBLEM_MAP[probKey].some(n => q.includes(n));
+        if (probMatch) {
+          for (const fKey in FAQ) {
+            if (fKey.includes(sysKey) && fKey.includes(probKey)) {
+              return { answer: FAQ[fKey], source: '本地知识库' };
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 3. 关键词匹配(50%)
+  const qWords = q.split(/[^\u4e00-\u9fff\w]+/).filter(w => w.length >= 2);
+  for (const key in FAQ) {
+    const keyWords = key.split(/[^\u4e00-\u9fff\w]+/).filter(w => w.length >= 2);
+    const matches = keyWords.filter(w => qWords.includes(w)).length;
+    if (matches >= keyWords.length * 0.5) {
+      return { answer: FAQ[key], source: '本地知识库' };
+    }
+  }
+
+  return null;
+}
+
+// ================== UI ==================
+const API_URL = '/api/v1/chat/completions';
+const chat = document.getElementById('chat');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+let isTyping = false;
+
+const welcomeHTML = `
+  <div class="welcome">
+    <strong>您好!我是安徽通驰数控售后技术支持助手。</strong>
+    我可以帮您查询以下数控折弯机系统的操作说明和故障排除:
+    <ul>
+      <li>Delem 系统:DA-53T / DA-58Tx / DA-66T</li>
+      <li>国产系统:E21 / E22 / DE15 / KT15</li>
+      <li>工业电脑:VIS-S860 / VIS-S875</li>
+      <li>液压系统 / 电气原理图</li>
+    </ul>
+    点击下方标签快速提问,或直接输入您的问题:
+    <div class="tag-container">
+      <span class="tag" onclick="quickAsk('DA-53T怎么编程')">DA-53T编程</span>
+      <span class="tag" onclick="quickAsk('E22报警')">E22报警</span>
+      <span class="tag" onclick="quickAsk('漏油')">漏油</span>
+      <span class="tag" onclick="quickAsk('压力不足')">压力不足</span>
+      <span class="tag" onclick="quickAsk('不回程')">不回程</span>
+      <span class="tag" onclick="quickAsk('精度差')">精度差</span>
+      <span class="tag" onclick="quickAsk('怎么换模')">换模</span>
+      <span class="tag" onclick="quickAsk('电气原理图')">电气图</span>
+    </div>
+  </div>
+`;
+chat.innerHTML = welcomeHTML;
+
+function quickAsk(text) {
+  input.value = text;
+  send();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+}
+
+function appendMsg(role, html, badge) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const now = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+  let badgeHtml = '';
+  if (badge) {
+    const cls = badge === '本地知识库' ? 'local' : (badge === 'AI助手' ? 'api' : 'error');
+    badgeHtml = `<span class="source-badge ${cls}">${badge}</span><br>`;
+  }
+  div.innerHTML = badgeHtml + html + '<div class="msg-meta">' + now + '</div>';
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showTyping(text) {
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = 'typing';
+  div.innerHTML = '<div style="padding:8px 14px;"><span style="color:#666;font-size:13px;">⏳ ' + (text || '正在查询...') + '</span><div class="typing" style="margin-top:6px;"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function mdToHtml(text) {
+  let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/```(?:\w+)?\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h3 style="margin-top:12px">$1</h3>');
+  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^- (.+)$/gm, '• $1');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+async function send() {
+  const text = input.value.trim();
+  if (!text || isTyping) return;
+
+  appendMsg('user', text);
+  input.value = '';
+  input.rows = 1;
+  isTyping = true;
+  sendBtn.disabled = true;
+
+  // 1. 先查本地FAQ(零延迟)
+  const faqResult = searchFAQ(text);
+  if (faqResult) {
+    appendMsg('bot', mdToHtml(faqResult.answer), faqResult.source);
+    isTyping = false;
+    sendBtn.disabled = false;
+    return;
+  }
+
+  // 2. 本地没命中,调API查完整知识库
+  showTyping('正在查询说明书知识库,请稍候...');
+
+  const messages = [
+    { role: 'system', content: '你是安徽通驰数控有限公司的售后客服助手,精通DA-53T/53Tx/58Tx/66T、E21/E22、DE15、KT15、S860/S875等数控系统的操作、编程、故障排除和参数设置。优先用中文回答,给出具体的操作步骤和参数值。' },
+    { role: 'user', content: text }
+  ];
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openclaw',
+        messages: messages,
+        max_tokens: 4000,
+        temperature: 0.3,
+        stream: false
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('HTTP ' + res.status + ': ' + err);
+    }
+
+    const data = await res.json();
+    const content = data.choices?.[0]?.message?.content || '服务器未返回有效回复。';
+    removeTyping();
+    appendMsg('bot', mdToHtml(content), 'AI助手');
+  } catch (err) {
+    removeTyping();
+    if (err.name === 'AbortError') {
+      appendMsg('bot', '<strong style="color:#c62828">请求超时:</strong>服务器响应较慢,可能是网络不稳定或服务器繁忙。<br><br>常见问题(如漏油、报警、编程)可直接在本地知识库中查找,无需等待服务器响应。请尝试用更简短的关键词提问,如"E22报警"或"漏油"。', '超时');
+    } else {
+      appendMsg('bot', '<strong style="color:#c62828">请求失败:</strong>' + err.message + '<br><br>如果持续无法连接,请联系管理员检查服务器状态。<br>常见技术问题可点击下方标签快速查询。', '错误');
+    }
+  } finally {
+    isTyping = false;
+    sendBtn.disabled = false;
+  }
+}
+
+// Auto-resize textarea
+input.addEventListener('input', () => {
+  input.rows = 1;
+  const rows = Math.min(5, Math.ceil(input.scrollHeight / 24));
+  input.rows = rows;
+});
+
+// 防止移动端回弹
+let startY = 0;
+chat.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
+chat.addEventListener('touchmove', (e) => {
+  const scrollTop = chat.scrollTop;
+  const scrollH = chat.scrollHeight;
+  const clientH = chat.clientHeight;
+  const y = e.touches[0].clientY;
+  const delta = y - startY;
+  if ((scrollTop <= 0 && delta > 0) || (scrollTop + clientH >= scrollH && delta < 0)) {
+    // 不阻止默认行为,让外层滚动
+  }
+});
+</script>
 </body>
 </html>
