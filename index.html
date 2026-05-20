@@ -363,9 +363,9 @@ E系列:系统设置→参数备份→导出到U盘。
 - 编码器报警 → 查接线和屏蔽
 
 **📄 原始PDF图纸下载（扫描件）：**
-- <a href="/downloads/电液折弯机原理图.pdf" target="_blank">300吨以下电液折弯机原理图</a>
-- <a href="/downloads/KT15-睿能电气原理图.pdf" target="_blank">KT15-睿能 EPLAN电气图纸</a>
-- <a href="/downloads/剪板机E21S-电气原理图.pdf" target="_blank">剪板机E21S变频-电气原理图</a>`,
+- [300吨以下电液折弯机原理图](/downloads/电液折弯机原理图.pdf)
+- [KT15-睿能 EPLAN电气图纸](/downloads/KT15-睿能电气原理图.pdf)
+- [剪板机E21S变频-电气原理图](/downloads/剪板机E21S-电气原理图.pdf)`,
 
   "伺服驱动器接线": `伺服驱动器接线要点：
 **电源：** L1/L2/L3（三相），PE接地
@@ -562,15 +562,24 @@ function removeTyping() {
 }
 
 function mdToHtml(text) {
-  let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/```(?:\w+)?\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h3 style="margin-top:12px">$1</h3>');
-  html = html.replace(/^# (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^- (.+)$/gm, '• $1');
-  html = html.replace(/\n/g, '<br>');
+  // Markdown → HTML conversion (FAQ content is trusted)
+  let html = text
+    // Links: [text](url) → clickable HTML link
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:#1a73e8;text-decoration:underline">$1</a>')
+    // Bold
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Code blocks
+    .replace(/```(?:\w+)?\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+    // Inline code
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h3 style="margin-top:12px">$1</h3>')
+    .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+    // Bullet lists
+    .replace(/^- (.+)$/gm, '• $1')
+    // Line breaks
+    .replace(/\n/g, '<br>');
   return html;
 }
 
